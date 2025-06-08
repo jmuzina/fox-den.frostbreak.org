@@ -1,0 +1,16 @@
+{
+  "contact_us_success_message": "Gracias. Tu mensaje ha sido enviado.",
+  "contact_us_error_message": "Lo siento, hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.",
+  "validation_error_name_length": "El nombre debe tener como máximo 50 caracteres.",
+  "validation_error_email_required": "El correo electrónico es obligatorio.",
+  "validation_error_email_invalid": "El correo electrónico no es válido.",
+  "validation_error_subject_required": "El asunto es obligatorio.",
+  "validation_error_subject_malformed": "El asunto contiene caracteres inválidos.",
+  "validation_error_subject_invalid_type": "El asunto debe ser una cadena de texto.",
+  "validation_error_subject_length": "El asunto debe tener entre 5 y 100 caracteres.",
+  "validation_error_message_required": "El contenido del mensaje es obligatorio.",
+  "validation_error_message_malformed": "El mensaje contiene caracteres inválidos.",
+  "validation_error_message_invalid_type": "El contenido del mensaje debe ser una cadena de texto.",
+  "validation_error_message_length": "El contenido del mensaje debe tener entre 10 y 2000 caracteres.",
+  "validation_error_general_message": "Validación fallida."
+}

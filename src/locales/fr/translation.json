@@ -1,0 +1,16 @@
+{
+  "contact_us_success_message": "Merci. Votre message a été envoyé.",
+  "contact_us_error_message": "Désolé, il y a eu un problème lors de l'envoi de votre message. Veuillez réessayer plus tard.",
+  "validation_error_name_length": "Le nom doit comporter au maximum 50 caractères.",
+  "validation_error_email_required": "L'e-mail est requis.",
+  "validation_error_email_invalid": "L'e-mail est invalide.",
+  "validation_error_subject_required": "Le sujet est requis.",
+  "validation_error_subject_malformed": "Le sujet contient des caractères invalides.",
+  "validation_error_subject_invalid_type": "Le sujet doit être une chaîne de caractères.",
+  "validation_error_subject_length": "Le sujet doit contenir entre 5 et 100 caractères.",
+  "validation_error_message_required": "Le contenu du message est requis.",
+  "validation_error_message_malformed": "Le message contient des caractères invalides.",
+  "validation_error_message_invalid_type": "Le contenu du message doit être une chaîne de caractères.",
+  "validation_error_message_length": "Le contenu du message doit contenir entre 10 et 2000 caractères.",
+  "validation_error_general_message": "Échec de la validation."
+}

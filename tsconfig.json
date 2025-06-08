@@ -1,0 +1,27 @@
+{
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "test", "tests", "coverage", "docs"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": "src",
+
+    "outDir": "dist/esm",
+    "declarationDir": "dist/types",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ESNext", "ES6"],
+    "target": "ES2022",
+
+    "types": ["node"],
+
+    "declaration": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "removeComments": true
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
+}
