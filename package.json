@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc && cp -R src/locales dist/locales",
     "dev": "nodemon --watch src --exec tsx ./src/index.ts",
-    "start": "cross-env NODE_ENV=production && npm run build && node dist/esm/index.js",
+    "start": "cross-env NODE_ENV=production && node dist/esm/index.js",
     "lint": "tsc --noEmit && prettier -c .",
     "lint:fix": "prettier -c -w ."
   },
@@ -25,6 +25,7 @@
     "cors": "^2.8.5",
     "dotenv": "16.5.0",
     "express": "5.1.0",
+    "express-rate-limit": "^7.5.0",
     "express-validator": "^7.2.1",
     "helmet": "^8.1.0",
     "i18next": "^25.2.1",

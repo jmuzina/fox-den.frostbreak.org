@@ -25,7 +25,7 @@ export default async function i18n() {
     .use(i18NextFsBackend)
     .use(languageDetector)
     .init({
-      debug: true,
+      debug: NODE_ENV === "development",
       backend: {
         loadPath,
       },

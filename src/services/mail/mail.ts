@@ -7,11 +7,13 @@ const { MAIL_HOST, MAIL_PORT, MAIL_SECURE, MAIL_USER, MAIL_PASS } = process.env;
 
 export class MailService {
   available = false;
+  reverifying = false;
 
   private nodeTransportOptions = {
     host: MAIL_HOST || "localhost",
     port: Number(MAIL_PORT) || (MAIL_SECURE == "true" ? 587 : 25),
-    secure: MAIL_SECURE === "true",
+    // https://github.com/nodemailer/nodemailer/issues/1461
+    // secure: MAIL_SECURE === "true",
     auth: {
       user: MAIL_USER || "",
       pass: MAIL_PASS || "",
@@ -24,6 +26,23 @@ export class MailService {
   private transporter: Transporter = nodemailer.createTransport(
     this.nodeTransportOptions,
   );
+
+  async reverify(): Promise<boolean> {
+    if (this.reverifying) {
+      logger.warn("Mail service is already verifying. Skipping reverify call.");
+      return this.available;
+    }
+    this.reverifying = true;
+    try {
+      this.available = false;
+      if (!this.available) {
+        await this.initialize();
+      }
+    } finally {
+      this.reverifying = false;
+    }
+    return this.available;
+  }
 
   async sendMail(mailOptions: Mail.Options): Promise<MailSendResult> {
     try {
@@ -57,7 +76,6 @@ export class MailService {
         try {
           ++attemptNum;
           this.available = await this.transporter.verify();
-          attemptNum = 0;
           logger.info("Mail transporter is ready and available.");
         } catch (error) {
           initError = error as Error;
@@ -89,7 +107,6 @@ export class MailService {
   }
 
   constructor() {
-    console.log("NODE OPTIONS", this.nodeTransportOptions);
     this.initialize().catch((err) => {
       console.warn(
         `Mail service failed to initialize: ${err instanceof Error ? err.message : "Unknown error"} API will remain up and retry initialization on the next request.`,

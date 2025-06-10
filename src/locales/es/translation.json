@@ -1,6 +1,7 @@
 {
   "contact_us_success_message": "Gracias. Tu mensaje ha sido enviado.",
   "contact_us_error_message": "Lo siento, hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.",
+  "contact_us_mail_service_unavailable": "Lo siento, el servicio de correo no está disponible en este momento. Por favor, envíanos un correo electrónico manualmente.",
   "validation_error_name_length": "El nombre debe tener como máximo 50 caracteres.",
   "validation_error_email_required": "El correo electrónico es obligatorio.",
   "validation_error_email_invalid": "El correo electrónico no es válido.",

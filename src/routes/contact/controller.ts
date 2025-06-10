@@ -1,11 +1,35 @@
 import { NextFunction, Request, Response } from "express";
 import { mailService } from "../../services/index.js";
 import { HttpException } from "../../exceptions/index.js";
-import { body, query, validationResult } from "express-validator";
+import { body, validationResult } from "express-validator";
 import { logger } from "../../utils/index.js";
 import { ValidationErrorToError } from "../../middleware/errorHandler.js";
+import { rateLimit } from "express-rate-limit";
 
 const { MAIL_CONTACT_ADDRESS } = process.env;
+
+export const contactUsMailServiceAvailable = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const available = await mailService.reverify();
+  if (available) return next();
+
+  logger.warn(
+    "Mail service is not available. Contact form submission will fail.",
+  );
+  return next(
+    new HttpException(503, req.t("contact_us_mail_service_unavailable")),
+  );
+};
+
+export const contactUsRateLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 60 minutes
+  limit: 3, // Limit each IP to 3 emails per windowMs / 3 emails per hour
+  standardHeaders: "draft-8", // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+});
 
 export const contactUsValidator = [
   body("name")

@@ -1,6 +1,7 @@
 {
   "contact_us_success_message": "Thank you. Your message has been sent.",
   "contact_us_error_message": "Sorry, there was an issue sending your message. Please try again later.",
+  "contact_us_mail_service_unavailable": "Sorry, the mail service is currently unavailable. Please email us manually.",
   "validation_error_name_length": "Name must be at most 50 characters.",
   "validation_error_email_required": "Email is required.",
   "validation_error_email_invalid": "Email is invalid.",

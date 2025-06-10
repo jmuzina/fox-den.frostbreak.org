@@ -1,10 +1,21 @@
 import { Router } from "express";
-import { contactUsController, contactUsValidator } from "./controller.js";
+import {
+  contactUsController,
+  contactUsMailServiceAvailable,
+  contactUsRateLimiter,
+  contactUsValidator,
+} from "./controller.js";
 
 const contactRouter = (): Router => {
   const router = Router();
 
-  router.post("/send", contactUsValidator, contactUsController);
+  router.post(
+    "/send",
+    contactUsValidator,
+    contactUsRateLimiter,
+    contactUsMailServiceAvailable,
+    contactUsController,
+  );
 
   return router;
 };
