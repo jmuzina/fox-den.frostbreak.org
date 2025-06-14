@@ -1,0 +1,119 @@
+name: "Deploy Docker image via SSH & Docker"
+
+inputs:
+  API_DEPLOY_HOST:
+    description: "The host of the server to deploy to"
+    required: true
+  API_DEPLOY_USERNAME:
+    description: "The username for SSH connection"
+    required: true
+  API_DEPLOY_SSH_KEY:
+    description: "The SSH private key for authentication"
+    required: true
+  API_DEPLOY_SSH_PASSPHRASE:
+    description: "The passphrase for the SSH private key"
+    required: true
+  API_DEPLOY_PORT:
+    description: "The port for SSH connection"
+    default: "22"
+  DOCKERHUB_USERNAME:
+    description: "Docker Hub username for authentication (optional)"
+    required: true
+  DOCKERHUB_SECRET:
+    description: "Docker Hub password for authentication (optional)"
+    required: true
+  DOCKER_IMAGE_NAME:
+    description: "The full name of the Docker image"
+    required: true
+    default: ${{ github.repository }}
+  DOCKER_IMAGE_TAG:
+    description: "The tag of the Docker image to deploy (e.g., latest or commit SHA)"
+    default: "latest"
+  DOCKER_HOST_PORT:
+    description: "The host port to map for the Docker container"
+    required: true
+  DOCKER_CONTAINER_PORT:
+    description: "The port the application listens on inside the Docker container"
+    required: true
+    default: "3000"
+  MAIL_CONTACT_ADDRESS:
+    description: "Email address for contact"
+    required: true
+  MAIL_HOST:
+    description: "SMTP host for email"
+    required: true
+  MAIL_PASS:
+    description: "SMTP password for email"
+    required: true
+  MAIL_PORT:
+    description: "SMTP port for email"
+    required: true
+  MAIL_SECURE:
+    description: "SMTP secure connection (true/false)"
+    required: true
+  MAIL_USER:
+    description: "SMTP user for email"
+    required: true
+  NODE_ENV:
+    description: "Node environment, staging or production"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Deploy Docker Image and Update Server
+      uses: appleboy/ssh-action@v1.2.2
+      with:
+        host: ${{ inputs.API_DEPLOY_HOST }}
+        username: ${{ inputs.API_DEPLOY_USERNAME }}
+        key: ${{ inputs.API_DEPLOY_SSH_KEY }}
+        passphrase: ${{ inputs.API_DEPLOY_SSH_PASSPHRASE }}
+        port: ${{ inputs.API_DEPLOY_PORT }}
+        script: |
+          set -e
+
+          DOCKER_CONTAINER_NAME="fox-den-api-${{ inputs.NODE_ENV }}"
+          FULL_IMAGE="${{ inputs.DOCKER_IMAGE_NAME }}:${{ inputs.DOCKER_IMAGE_TAG }}"
+
+          echo "Checking for existing container '$DOCKER_CONTAINER_NAME'..."
+          if docker inspect "$DOCKER_CONTAINER_NAME" >/dev/null 2>&1; then
+              echo "Existing container '$DOCKER_CONTAINER_NAME' found. Stopping and removing..."
+              docker stop "$DOCKER_CONTAINER_NAME"
+              docker rm "$DOCKER_CONTAINER_NAME"
+              echo "Old container stopped and removed."
+          else
+              echo "No existing container '$DOCKER_CONTAINER_NAME' found. Proceeding with new deployment."
+          fi
+
+          docker login -u "${{ inputs.DOCKERHUB_USERNAME }}" --password-stdin <<< "${{ inputs.DOCKERHUB_SECRET }}"
+          echo "Docker login successful."
+
+          echo "Pulling Docker image: $FULL_IMAGE"
+          docker pull "$FULL_IMAGE"
+          echo "Docker image pulled successfully: $FULL_IMAGE"
+
+          ENV_VARS_ARRAY=(
+            -e "MAIL_CONTACT_ADDRESS=${{ inputs.MAIL_CONTACT_ADDRESS }}"
+            -e "MAIL_HOST=${{ inputs.MAIL_HOST }}"
+            -e "MAIL_PASS=${{ inputs.MAIL_PASS }}"
+            -e "MAIL_PORT=${{ inputs.MAIL_PORT }}"
+            -e "MAIL_SECURE=${{ inputs.MAIL_SECURE }}"
+            -e "MAIL_USER=${{ inputs.MAIL_USER }}"
+            -e "NODE_ENV=${{ inputs.NODE_ENV }}"
+          )
+
+          echo "Attempting to start new Docker container '$DOCKER_CONTAINER_NAME' with image $FULL_IMAGE..."
+          docker run \
+            --name "$DOCKER_CONTAINER_NAME" \
+            -p ${{ inputs.DOCKER_HOST_PORT }}:${{ inputs.DOCKER_CONTAINER_PORT }} \
+            --restart always \
+            -d \
+            "${ENV_VARS_ARRAY[@]}" \
+            "$FULL_IMAGE"
+          echo "New Docker container '$DOCKER_CONTAINER_NAME' started successfully."
+
+          echo "Cleaning up old Docker images (pruning dangling images)..."
+          docker image prune -f
+          echo "Docker image prune complete."
+
+          echo "Deployment complete!"

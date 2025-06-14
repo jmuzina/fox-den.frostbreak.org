@@ -1,0 +1,43 @@
+name: CI
+
+inputs:
+  NODE_ENV:
+    description: "Node environment, staging or production"
+    required: false
+    default: "staging"
+  DOCKER_PUSH:
+    description: "Whether to push the Docker image to the registry"
+    required: false
+    default: "true"
+  DOCKERHUB_USERNAME:
+    description: "Docker Hub username for authentication"
+    required: false
+  DOCKERHUB_SECRET:
+    description: "Docker Hub password for authentication"
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.10.0
+
+    - name: Login to Docker Hub
+      if: ${{ inputs.DOCKER_PUSH == 'true' }}
+      uses: docker/login-action@v3
+      with:
+        username: ${{ inputs.DOCKERHUB_USERNAME }}
+        password: ${{ inputs.DOCKERHUB_SECRET }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        push: ${{ inputs.DOCKER_PUSH }}
+        tags: |
+          ${{ inputs.NODE_ENV == 'production' && format('{0}:latest', github.repository) || '' }}
+          ${{ github.repository }}:${{ github.sha }}
+        build-args: |
+          NODE_ENV=${{ inputs.NODE_ENV }}
+          APP_VERSION=${{ github.sha }}
