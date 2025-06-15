@@ -13,5 +13,6 @@
   "validation_error_message_malformed": "Le message contient des caractères invalides.",
   "validation_error_message_invalid_type": "Le contenu du message doit être une chaîne de caractères.",
   "validation_error_message_length": "Le contenu du message doit contenir entre 10 et 2000 caractères.",
-  "validation_error_general_message": "Échec de la validation."
+  "validation_error_general_message": "Échec de la validation.",
+  "referrer_validation_error": "Cette requête doit provenir d'une source approuvée."
 }

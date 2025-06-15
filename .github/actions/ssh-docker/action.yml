@@ -57,6 +57,9 @@ inputs:
   NODE_ENV:
     description: "Node environment, staging or production"
     required: true
+  APPROVED_REFERRERS:
+    description: "Comma-separated list of approved referrers (e.g., 'https://example.com,https://example.org')"
+    required: true
 
 runs:
   using: "composite"
@@ -100,6 +103,7 @@ runs:
             -e "MAIL_SECURE=${{ inputs.MAIL_SECURE }}"
             -e "MAIL_USER=${{ inputs.MAIL_USER }}"
             -e "NODE_ENV=${{ inputs.NODE_ENV }}"
+            -e "APPROVED_REFERRERS=${{ inputs.APPROVED_REFERRERS }}"
           )
 
           echo "Attempting to start new Docker container '$DOCKER_CONTAINER_NAME' with image $FULL_IMAGE..."

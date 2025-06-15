@@ -13,5 +13,6 @@
   "validation_error_message_malformed": "Message contains invalid characters.",
   "validation_error_message_invalid_type": "Message content must be a string.",
   "validation_error_message_length": "Message content must be between 10 and 2000 characters.",
-  "validation_error_general_message": "Validation Failed."
+  "validation_error_general_message": "Validation Failed.",
+  "referrer_validation_error": "This request must come from an approved source."
 }

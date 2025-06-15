@@ -13,5 +13,6 @@
   "validation_error_message_malformed": "El mensaje contiene caracteres inválidos.",
   "validation_error_message_invalid_type": "El contenido del mensaje debe ser una cadena de texto.",
   "validation_error_message_length": "El contenido del mensaje debe tener entre 10 y 2000 caracteres.",
-  "validation_error_general_message": "Validación fallida."
+  "validation_error_general_message": "Validación fallida.",
+  "referrer_validation_error": "Esta solicitud debe provenir de una fuente aprobada."
 }

@@ -32,3 +32,4 @@ const middlewares = async (): Promise<Router> => {
 export default middlewares;
 
 export { default as errorHandler } from "./errorHandler.js";
+export * from "./referrer.js";
