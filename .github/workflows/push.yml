@@ -20,7 +20,7 @@ jobs:
         uses: ./.github/actions/ci
         with:
           NODE_ENV: staging
-          DOCKER_PUSH: ${ github.ref_name == 'main' }
+          DOCKER_PUSH: ${{ github.ref_name == 'main' && 'true' || 'false' }}
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_SECRET: ${{ secrets.DOCKERHUB_SECRET }}
   deploy:
