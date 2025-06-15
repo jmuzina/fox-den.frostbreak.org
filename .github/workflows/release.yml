@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: CI
+        uses: ./.github/actions/ci
+        with:
+          NODE_ENV: production
+          DOCKER_PUSH: true
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_SECRET: ${{ secrets.DOCKERHUB_SECRET }}
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: production
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Deploy API
+        uses: ./.github/actions/ssh-docker
+        with:
+          API_DEPLOY_HOST: ${{ secrets.API_DEPLOY_HOST }}
+          API_DEPLOY_USERNAME: ${{ secrets.API_DEPLOY_USERNAME }}
+          API_DEPLOY_SSH_KEY: ${{ secrets.API_DEPLOY_SSH_KEY }}
+          API_DEPLOY_SSH_PASSPHRASE: ${{ secrets.API_DEPLOY_SSH_PASSPHRASE }}
+          API_DEPLOY_PORT: ${{ secrets.API_DEPLOY_PORT }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_USER: ${{ secrets.MAIL_USER }}
+          MAIL_PASS: ${{ secrets.MAIL_PASS }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
+          MAIL_SECURE: ${{ secrets.MAIL_SECURE }}
+          MAIL_CONTACT_ADDRESS: ${{ secrets.MAIL_CONTACT_ADDRESS }}
+          NODE_ENV: production
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_SECRET: ${{ secrets.DOCKERHUB_SECRET }}
+          DOCKER_HOST_PORT: ${{ secrets.DOCKER_HOST_PORT }}
