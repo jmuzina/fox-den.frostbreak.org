@@ -14,7 +14,7 @@ export const validateReferrer = (
   res: Response,
   next: NextFunction,
 ) => {
-  const referrer = req.get("Referrer") || req.get("Origin");
+  const referrer = req.get("Referer") || req.get("Origin");
 
   if (!referrer) {
     logger.warn("Request received without referrer header");
