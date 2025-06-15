@@ -17,7 +17,7 @@ jobs:
         uses: ./.github/actions/ci
         with:
           NODE_ENV: production
-          DOCKER_PUSH: "true"
+          DOCKER_PUSH: true
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_SECRET: ${{ secrets.DOCKERHUB_SECRET }}
   deploy:
