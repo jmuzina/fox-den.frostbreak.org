@@ -14,7 +14,7 @@ const __dirname = dirname(__filename);
 const loadPath = resolve(
   join(
     __dirname,
-    `../${NODE_ENV === "production" ? "../" : ""}locales/{{lng}}/{{ns}}.json`,
+    `../${NODE_ENV !== "development" ? "../" : ""}locales/{{lng}}/{{ns}}.json`,
   ),
 );
 
@@ -25,7 +25,7 @@ export default async function i18n() {
     .use(i18NextFsBackend)
     .use(languageDetector)
     .init({
-      debug: NODE_ENV === "development",
+      debug: NODE_ENV !== "production",
       backend: {
         loadPath,
       },
