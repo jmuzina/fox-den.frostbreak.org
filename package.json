@@ -20,7 +20,7 @@
     "lint:fix": "prettier -c -w ."
   },
   "dependencies": {
-    "compression": "^1.8.0",
+    "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "16.5.0",
@@ -31,7 +31,7 @@
     "i18next": "^25.2.1",
     "i18next-fs-backend": "^2.6.0",
     "i18next-http-middleware": "^3.7.4",
-    "morgan": "^1.10.0",
+    "morgan": "^1.10.1",
     "nodemailer": "7.0.3",
     "winston": "^3.17.0"
   },
